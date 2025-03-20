@@ -1,0 +1,46 @@
+export const seoConfig = {
+  title: 'Landing Page',
+  description: 'Uma landing page moderna e responsiva',
+  keywords: 'landing page, web, desenvolvimento, tecnologia',
+  author: 'Seu Nome',
+  ogTitle: 'Landing Page',
+  ogDescription: 'Uma landing page moderna e responsiva',
+  ogImage: '/og-image.jpg',
+  ogUrl: 'https://seusite.com',
+  twitterCard: 'summary_large_image',
+  twitterTitle: 'Landing Page',
+  twitterDescription: 'Uma landing page moderna e responsiva',
+  twitterImage: '/og-image.jpg',
+  openGraph: {
+    title: 'Landing Page | Sua Marca',
+    description: 'Descrição da sua landing page que aparecerá nas redes sociais.',
+    type: 'website',
+    locale: 'pt_BR',
+    siteName: 'Sua Marca',
+    images: [
+      {
+        url: '/og-image.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'Imagem para compartilhamento nas redes sociais',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Landing Page | Sua Marca',
+    description: 'Descrição da sua landing page que aparecerá no Twitter.',
+    image: '/twitter-image.jpg',
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+} as const; 
