@@ -1,10 +1,17 @@
 import { memo } from 'react';
 import { Button } from './ui/Button';
 import { useContactForm } from '../hooks/useContactForm';
+import { useAnalytics } from '../hooks/useAnalytics';
 import { CONTACT_TEXTS } from '../constants/texts';
 
 interface ContactFormProps {
   className?: string;
+}
+
+interface FormData {
+  name: string;
+  email: string;
+  message: string;
 }
 
 export const ContactForm = memo(({ className = '' }: ContactFormProps) => {
@@ -16,9 +23,25 @@ export const ContactForm = memo(({ className = '' }: ContactFormProps) => {
     error,
   } = useContactForm();
 
+  const { trackFormSubmission } = useAnalytics();
+
+  const onSubmit = async (data: FormData) => {
+    try {
+      // ... existing form submission logic ...
+      trackFormSubmission('contact', true, {
+        fields: Object.keys(data).length,
+        hasErrors: Object.keys(errors).length > 0,
+      });
+    } catch (err) {
+      trackFormSubmission('contact', false, {
+        error: err instanceof Error ? err.message : 'Unknown error',
+      });
+    }
+  };
+
   return (
     <form
-      onSubmit={handleSubmit}
+      onSubmit={handleSubmit(onSubmit)}
       className={`space-y-6 ${className}`}
       aria-label="Formulário de contato"
     >
