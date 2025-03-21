@@ -8,12 +8,6 @@ interface ContactFormProps {
   className?: string;
 }
 
-interface FormData {
-  name: string;
-  email: string;
-  message: string;
-}
-
 export const ContactForm = memo(({ className = '' }: ContactFormProps) => {
   const {
     register,
@@ -25,23 +19,26 @@ export const ContactForm = memo(({ className = '' }: ContactFormProps) => {
 
   const { trackFormSubmission } = useAnalytics();
 
-  const onSubmit = async (data: FormData) => {
-    try {
-      // ... existing form submission logic ...
-      trackFormSubmission('contact', true, {
-        fields: Object.keys(data).length,
-        hasErrors: Object.keys(errors).length > 0,
-      });
-    } catch (err) {
-      trackFormSubmission('contact', false, {
-        error: err instanceof Error ? err.message : 'Unknown error',
-      });
-    }
+  const onSubmitSuccess = () => {
+    trackFormSubmission('contact', true, {
+      fields: 3, // name, email, message
+      hasErrors: Object.keys(errors).length > 0,
+    });
+  };
+
+  const onSubmitError = (err: unknown) => {
+    trackFormSubmission('contact', false, {
+      error: err instanceof Error ? err.message : 'Unknown error',
+    });
   };
 
   return (
     <form
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={(e) => {
+        handleSubmit(e)
+          .then(onSubmitSuccess)
+          .catch(onSubmitError);
+      }}
       className={`space-y-6 ${className}`}
       aria-label="Formulário de contato"
     >

@@ -11,7 +11,7 @@ export const useContactForm = () => {
 
   const {
     register,
-    handleSubmit,
+    handleSubmit: rhfHandleSubmit,
     reset,
     watch,
     formState: { errors, isSubmitting },
@@ -40,16 +40,23 @@ export const useContactForm = () => {
 
       setStatus('success');
       reset();
+      return Promise.resolve();
     } catch (err) {
       setStatus('error');
       setError('Erro ao enviar mensagem. Por favor, tente novamente.');
       console.error('Erro ao enviar email:', err);
+      return Promise.reject(err);
     }
+  };
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    return rhfHandleSubmit(onSubmit)(e);
   };
 
   return {
     register,
-    handleSubmit: handleSubmit(onSubmit),
+    handleSubmit,
     errors,
     isSubmitting,
     status,
